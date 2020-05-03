@@ -19,7 +19,7 @@ A high level view of the encoding algorithm is shown here:
  ### Installation requirements
  Python version: 2.7.15
  
- There are no external libraries or addition requirements in order to execute this code.
+ There are no external libraries or additional requirements in order to run this code.
  
 For running the code you would only need to open a terminal, move to the LZW folder and execute:
  ```
