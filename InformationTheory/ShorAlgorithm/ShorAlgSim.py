@@ -1,3 +1,8 @@
+"""
+Date. Winter Semester 2017
+Python version: v2.7.15
+"""
+
 import numpy
 import random
 import timeit
