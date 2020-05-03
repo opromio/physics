@@ -22,8 +22,22 @@ Finally, is also worth noting that inside each folder you will find  a PDF file 
 
 ### List of Practices
 
-I. Testing Fortran & Gnuplot. Computing and plotting functions
+I. Testing Fortran & Gnuplot. Computing and plotting functions.
 
 II. Subroutines & Functions. I/O and Interpolation.
 
 III. Numeric Integration techniques.
+
+IV. Van der Waals equation analysis. Deriving by Newton-Raphson and Bisection methods. Comparison between both and finite differences methods.
+
+V. Gaussian distribution. Acceptance-Rejection Technique to Generate Random Variate.
+
+VI. Montecarlo method for integration. Single and Multi-dimensional Montecarlo integration
+
+VII. ODEs resolution techniques. Euler method for armonic equation.
+
+VIII. ODEs resolution techniques. Runge-Kutta. Computing eigenvalues and eigenvectors of the Schrödinger Equation.
+
+IX. The Poisson equation. PDE resolution techniques. Gauss-Seidel, Jacobi and Successive over relaxation methods.
+
+X. The Possion equation. Parabolic equations, Crank-Nicholson method.
