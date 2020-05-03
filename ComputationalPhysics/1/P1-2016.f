@@ -11,7 +11,7 @@
 	DOUBLE PRECISION SUMA
 !		Input
 5		WRITE(*,*) 'Introdueix un valor per K'
-		READ(*,*,IOSTAT=IEST), K
+		READ(*,*,IOSTAT=IEST) K
 		
 		IF((K.LT.15).OR.(K.GT.221).OR.(IEST.NE.0)) THEN
 			WRITE(*,*) 'Error'
@@ -29,7 +29,7 @@
 			S=SUMA(M,N)	
 			OPEN(UNIT=1,STATUS='UNKNOWN',FILE='P1-2016-res1.dat')
 			WRITE(1,*)'     #N       S8N        SASI         Q'
-1000		!!!FORMAT(I10,2X,F14.4, 2X, F14.4, 2X, F9.8)
+!1000		!!!FORMAT(I10,2X,F14.4, 2X, F14.4, 2X, F9.8)
 			DO N= 11,311, 3
 				S8=SUMA(8,N)
 				SASI=(N**3)/5.0
