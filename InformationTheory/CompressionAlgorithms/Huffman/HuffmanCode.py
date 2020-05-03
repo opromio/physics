@@ -93,7 +93,7 @@ class HuffmanCode:
 
     
 #__PROGRAMA PRINCIPAL_______________________________________________________
-with open("../quijote.txt","r+") as file, open("compquijote.bin","wb") as output:
+with open("../quijote.txt","r+") as file, open("compressed_quijote.bin","wb") as output:
     start = timeit.default_timer()
     text=file.read()
     text=text.rstrip()
@@ -110,7 +110,7 @@ with open("../quijote.txt","r+") as file, open("compquijote.bin","wb") as output
 
 
 #--------------------------DESCOMPRESSOR--------------------------------   
-with open("compquijote.bin","rb") as file, open("decompquijote.txt","w") as output:
+with open("compressed_quijote.bin","rb") as file, open("decompressed_quijote.txt","w") as output:
     bit_string = ""
     byte = file.read(1) #Fem una string que contingui tots els bits del fitxer
     while(len(byte)>=1):
