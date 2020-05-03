@@ -29,9 +29,10 @@ This will generate a compressed_quijote.bin file with the compressed version. Fo
 ```
 python lzw_decompressor.py
 ```
+* Note The decompressor takes around 2 minutes to decompress. This can be improved by a lot and needs reviewing.
+
 If you want to make sure that the decompressed file is indeed identical to the original file run (from a Unix terminal):
 ```
 diff ../quijote.txt quijote_decompressed.txt
 ```
 The output should be nothing.
-
