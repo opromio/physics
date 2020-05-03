@@ -32,7 +32,7 @@ while g:
     for i in range(1, n):
         period = 1 / freq[i]
         r = abs(int(period))
-        if (pow(a, 0, N) == pow(a, r, N) and r % 2 == 0 and pow(a, r / 2) != 1):
+        if pow(a, 0, N) == pow(a, r, N) and r % 2 == 0 and pow(a, r / 2) != 1:
             per.append(r)
         else:
             continue
@@ -41,18 +41,16 @@ while g:
         n1 = gcd(pow(a, r / 2) + 1, N)
         n2 = gcd(pow(a, r / 2) - 1, N)
 
-        if ((n1 != 1) and (n2 != 1) and (n1 != N) and (n2 != N)):
-            if (n1 * n2 == N):
+        if (n1 != 1) and (n2 != 1) and (n1 != N) and (n2 != N):
+            if n1 * n2 == N:
                 print 'Two factors of N=', Ni, 'are:', factor * int(n1), ',', int(n2)
                 stop = timeit.default_timer()
                 print(stop - start)
                 exit()
             else:
-                #                print(N)
                 N = N / max(n1, n2)
                 factor = factor * max(n1, n2)
-                #                print(N,max(n1,n2),factor,n1,n2)
-                if (N * factor == Ni):
+                if N * factor == Ni:
                     print 'Two factors of N=', Ni, 'are:', factor, ',', N
                     stop = timeit.default_timer()
                     print(stop - start)
