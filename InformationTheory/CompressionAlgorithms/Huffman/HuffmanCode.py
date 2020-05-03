@@ -93,7 +93,7 @@ class HuffmanCode:
 
     
 #__PROGRAMA PRINCIPAL_______________________________________________________
-with open("quijote.txt","r+") as file, open("compquijote.bin","wb") as output:
+with open("../quijote.txt","r+") as file, open("compquijote.bin","wb") as output:
     start = timeit.default_timer()
     text=file.read()
     text=text.rstrip()
