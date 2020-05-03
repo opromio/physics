@@ -44,9 +44,8 @@ with open("compressed_quijote.bin", "rb") as file, open("decompressed_quijote.tx
                 output.write(text)
                 print(timeit.default_timer() - start)
                 exit()
-
-            word = str(dictionary[str(int(pb[:k + 1], 2))]) + chr(
-                int(pb[k + 1:], 2))  # aixo es el caracter que tenim al diccionari
+            # afegim el caracter que tenim al diccionari
+            word = str(dictionary[str(int(pb[:k + 1], 2))]) + chr(int(pb[k + 1:], 2))
             c += 1
             # guardem el codi binari associat a c, i el caracter que representen els 8
             dictionary.update({str(int(bin(c)[2:].zfill(k + 1), 2)): word})
