@@ -6,7 +6,7 @@
       REAL*8 LX, DX
       INTEGER I, J, K, NX, NTMAX, NT
       PARAMETER (LX=1.3d0, NX=50.d0, DX=LX/NX)
-      REAL*8 TOLD(0:NX), TNEW(0:NX), XI, OMEGA, RHO, BETA
+      REAL*8 TOLD(0:NX), TNEW(0:NX), XI, OMEGA, RHO
       REAL*8 NMAX, ERROR, TOL, TINT
       
       REAL*8 TNEW2(1:NX-1), KAPPA, DT, R, X1, X2, X3, X4
@@ -19,81 +19,48 @@
       PARAMETER (NTMAX=6000)
       REAL*8 INTEG1, X0, TPROM(1:NTMAX)
 !     Output: Apartat 1)      
-      OPEN(UNIT=100, STATUS='UNKNOWN', FILE='Apartat1b.dat')
+      OPEN(UNIT=100, STATUS='UNKNOWN', FILE='Apartat1.dat')
 !     Output: Apartat 2) A      
       OPEN (UNIT=20, STATUS='UNKNOWN', FILE='Evolucio.dat')
 !     OUTPUT APARTAT 2) B
-      OPEN (UNIT=25, STATUS='UNKNOWN', FILE='Kau.dat')
+      OPEN (UNIT=25, STATUS='UNKNOWN', FILE='K10.dat')
 !     OUTPUT APARTAT 2) C
       OPEN (UNIT=10, STATUS='UNKNOWN', FILE='Gif.dat')
 !     Apartat 1
 !_______________________________________________________________________      
-      NMAX=5.d4
-      TOL=1.d-7
-      TINT=1.d0
-      KAPPA=2.2D-5
-      BETA=0.0002d0
-!     Iniciamos variables
-      TOLD(0)=0.d0
-      TOLD(NX)=280.d0
-      TNEW(0)=0.d0    
-      TNEW(NX)=280.d0
-      DO I=1, NX-1
-        TOLD(I)=TINT
-        TNEW(I)=TINT
-      ENDDO
-      
-      K=0
-10    CONTINUE
-      K=K+1
-      
-      DO I=1, NX-1
-!         JACOBI
-!-----------------------------------------------------------------------          
-       TNEW(I)=(KAPPA/(2.d0*KAPPA+BETA*DX**2))*(TNEW(I+1)+TNEW(I-1))
-      ENDDO
-!     Calcul errors     
-      ERROR=0.0D0
-      DO I=1,(NX-1)
-          ERROR=ERROR+DABS(TOLD(I)-TNEW(I)/(TOLD(I)+TNEW(I)))
-          TOLD(I)=TNEW(I)
-      ENDDO
-!     Fin bucles   
-!     Test convergencia     
-      IF ((K.lt.NMAX).AND.(ERROR.gt.TOL)) GOTO 10
-!     OUTPUT       
-      DO I=0, NX
-        XI=I*DX
-        WRITE(100,*) XI, TNEW(I)
-      ENDDO
-!     Fin metodo  
-      
-      
-      
-      
-      
-      
-
-      
-!_______________________________________________________________________     
-!      Apartat 2
-      BETA=2.d-4
-      KAPPA=2.2d-5
-      DT=4.d0/6.d0
-
-      R=(KAPPA*DT)/(DX**2)
-      X1=0.05d0
-      X2=0.35d0
-      X3=1.15d0
-    
+      OMEGA=1.89d0
+      NMAX=1.d5
+      TOL=1.d-3
+      TINT=0.d0
 !     Iniciamos variables
       TOLD(0)=0.d0
       TOLD(NX)=280.d0
       TNEW(0)=0.d0
       TNEW(NX)=280.d0
       DO I=1, NX-1
-        TOLD(I)=0.D0
-        TNEW(I)=0.D0
+        TOLD(I)=TINT
+        TNEW(I)=TINT
+      ENDDO
+!_______________________________________________________________________     
+!      Apartat 2
+      
+      KAPPA=2.2d-5
+      DT=4.d0/6.d0
+
+      R=(KAPPA*DT)/(DX**2)
+      X1=5.d0
+      X2=10.d0
+      X3=20.d0
+
+      
+!     Iniciamos variables
+      TOLD(0)=0.d0
+      TOLD(NX)=280.d0
+      TNEW(0)=0.d0
+      TNEW(NX)=280.d0
+      DO I=1, NX-1
+        TOLD(I)=TINT
+        TNEW(I)=TINT
       ENDDO
   
 
@@ -136,17 +103,20 @@
         
         CALL TRIDIAG(A, B, C, TRIGHT, TNEW2, NX-1)
         DO I=1, NX-1
-          IF(MOD(NT,50).eq.0.d0) WRITE(10,*) NT*DT, I*DX, TNEW2(I)
+          IF(MOD(NT,100).eq.0.d0) WRITE(10,*) NT*DT, I*DX, TNEW2(I)
           TCURRENT(I)=TNEW2(I)
         ENDDO
-        IF(MOD(NT,50).eq.0.d0) THEN 
+        IF(MOD(NT,100).eq.0.d0) THEN 
           WRITE(10,*) 
           WRITE(10,*) 
         ENDIF
-        WRITE(20,*) NT*DT, TNEW2(INT(X1/DX)), TNEW2(INT(X2/DX)-1), 
-     &              TNEW2(INT(X3/DX)-1)          
-        TNEW(0)=0.d0
-        TNEW(NX)=280.d0
+        WRITE(20,*) NT*DT, TNEW2(INT(X1/DX)-1), TNEW2(INT(X2/DX)-1), 
+     &              TNEW2(INT(X3/DX)-1), TNEW2(INT(X4/DX)-1)          
+        TNEW(0)=40.d0
+        TNEW(NX)=20.d0
+        DO I=1, NX-1
+          TNEW(I)=TNEW2(I)
+        ENDDO
 !      Apartat b)
 !-----------------------------------------------------------------------
         IM=2!!

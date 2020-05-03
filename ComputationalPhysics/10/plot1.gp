@@ -1,12 +1,9 @@
-set title "θ(x) (estacionari)"
-set xlabel "x(m)"
-set ylabel "θ (ºC)"
-set key left top
-set xrange [0:1.3]
+set title "T(x)"
+set xlabel "x(cm)"
+set ylabel "T  (? C)"
+set key right top
 
-plot "Apartat1.dat" u 1:2 w l lw 3 t"β=0.002",\
-     "Apartat1b.dat" u 1:2 w l lw 3 t"β=0.0002",\
-     "Apartat1c.dat"u 1:2 w l lw 3 t"β=0.00005"
+plot "Apartat1.dat" u 1:2 w l lw 3 t""
   
 
 

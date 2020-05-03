@@ -1,13 +1,12 @@
-set title "Evolució θ(t) en x_i= 5, 35, 115 (cm)"
+set title "Evolució T(t) en x_i= 5, 10, 20 i 30"
 set xlabel "t(s)"
-set ylabel "θ(ºC)"
-set key left top
+set ylabel "T(s)"
+set key right top
 
-
-plot "Evolucio.dat" u 1:2 w l lw 3 t"x=0.05 m",\
-     "" u 1:3 w l lw 3 t"x=0.35 m",\
-     "" u 1:4 w l lw 3 t"x=1.15 m",\
-
+plot "Evolucio.dat" u 1:2 w l lw 3 t"x=5",\
+     "" u 1:3 w l lw 3 t"x=10",\
+     "" u 1:4 w l lw 3 t"x=20",\
+     "" u 1:5 w l lw 3 t"x=30"
 
 
 pause -1

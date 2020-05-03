@@ -1,0 +1,102 @@
+      PROGRAM PRACTICA7
+      IMPLICIT NONE
+      INTEGER NPASOS, I
+!      PARAMETER(NPASOS=1000)
+      DOUBLE PRECISION XMASS,XLONGI,GG,OMEGANAT,THAT,T0,TMAX,DELTAT,PI
+      DOUBLE PRECISION THETA0, DTHETA0, FEULER(2), FEULERM(2)
+      DOUBLE PRECISION THETAE, DTHETAE
+!      PARAMETER(XMASS=0.32D0, XLONGI=1.27D0, GG=9.8D0,PI=DACOS(-1.0D0))
+      EXTERNAL PENDULO
+      COMMON/PAR/ T0, DELTAT, NPASOS
+      COMMON/PAR2/ GG, XLONGI
+      OPEN(1, FILE="P7-2016-res.dat")
+      OPEN(2, FILE="P7-2016-res2.dat")
+!      EKIN=
+!      EPOT=
+!      ETOT=
+      npasos=10000
+      xmass=0.32d0
+      xlongi=1.27d0
+      gg=9.8d0
+      pi=dacos(-1.0d0)
+      OMEGANAT=SQRT(GG/XLONGI)
+      THAT=2*PI/OMEGANAT
+      T0=0.0D0
+      TMAX=4*THAT
+
+      DELTAT=4.0D0*THAT/REAL(NPASOS)
+
+      THETA0=0.2D0
+      DTHETA0=0.0D0
+      CALL EULER(THETA0, DTHETA0, THETAE, DTHETAE)
+      CALL EULERM(THETA0,DTHETA0,THETAE,DTHETAE)
+
+
+
+
+      END
+!***********************************************************************      
+      SUBROUTINE EULER(THETA0, DTHETA0, THETAE, DTHETAE)
+      IMPLICIT NONE
+      INTEGER IT, NPASOS
+      DOUBLE PRECISION TEMPS, T0, THETA0, DTHETA0
+      DOUBLE PRECISION THETA1, DTHETA1, DELTAT, FEULER(2)
+      DOUBLE PRECISION THETAE, DTHETAE
+      DOUBLE PRECISION GG, XLONGI
+      COMMON/PAR/ T0, DELTAT, NPASOS
+      
+
+      DO IT=1, NPASOS+1
+       CALL PENDULO(THETA0, DTHETA0, FEULER)
+       TEMPS=T0+(IT*DELTAT - DELTAT)
+       THETA1 = THETA0 + deltat*FEULER(1)
+       DTHETA1 = DTHETA0 + deltat*FEULER(2)
+       WRITE(1,*) TEMPS, THETA1, DTHETA1
+       IF (IT.EQ.1) THEN
+        THETAE=THETA1
+        DTHETAE=DTHETA1
+       ENDIF
+       THETA0=THETA1
+       DTHETA0=DTHETA1
+      ENDDO
+
+      RETURN
+
+      END
+!***********************************************************************
+      SUBROUTINE EULERM(THETA0,DTHETA0,THETAE,DTHETAE)
+      IMPLICIT NONE
+      INTEGER IT, NPASOS
+      DOUBLE PRECISION THETAE, DTHETAE, FEULERM(2), TEMPS, T0, DELTAT
+      DOUBLE PRECISION THETA0, DTHETA0, THETA2, DTHETA2
+      DOUBLE PRECISION GG, XLONGI
+      COMMON/PAR/ T0, DELTAT, NPASOS
+      EXTERNAL PENDULO
+
+      write(2,*) t0, theta0
+      DO IT=2, NPASOS+1
+       TEMPS=T0+(IT-1)*DELTAT
+       CALL PENDULO(THETAE, DTHETAE, FEULERM)
+       THETA2 = THETA0 + 2.0D0*DELTAT*FEULERM(1)
+       DTHETA2 = DTHETA0 + 2.0D0*DELTAT*FEULERM(2)
+       write(2,*) temps, theta2
+       THETA0=THETAE
+       DTHETA0=DTHETAE
+       THETAE=THETA2
+       DTHETAE=DTHETA2
+      ENDDO    
+      
+      RETURN
+      
+      END
+!***********************************************************************
+
+      SUBROUTINE PENDULO(THETA,DTHETA,F)
+      DOUBLE PRECISION F(2), DTHETA, GG, XLONGI, THETA   
+      COMMON/PAR2/ GG, XLONGI 
+      F(1)=DTHETA
+      F(2)=-GG/XLONGI*DSIN(THETA)
+      RETURN
+      END
+
+!***********************************************************************

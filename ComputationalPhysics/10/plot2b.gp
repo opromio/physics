@@ -1,11 +1,11 @@
 set title "Evolució temperatura promig per diferents valors de K"
 set xlabel "t(s)"
-set ylabel "θ(ºC)"
-set key right bottom
+set ylabel "T(s)"
+set key left bottom
 
-plot "KFE.dat" w l lw 3 t"K_{Fe}",\
-     "KAU.dat" w l lw 3 t"K_{Au}",\
-   
+plot "K1.dat" w l lw 3 t"K=1",\
+     "K5.dat" w l lw 3 t"K=5",\
+     "K10.dat" w l lw 3 t"K=10"
 
 
 pause -1

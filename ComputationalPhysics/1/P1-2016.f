@@ -4,16 +4,17 @@
 	PROGRAM PROBLEMA1
 	IMPLICIT NONE	
 ! 	Declarem variables
-	REAL P, LAZY, S
-	INTEGER I, M, N, K
+	INTEGER P, K, LAZY
+	INTEGER S, M, N, SUMA
+	INTEGER S4, I
 	INTEGER IEST
-	REAL SASI, Q, S8
-	DOUBLE PRECISION SUMA
+	REAL SASI,Q
+
 !		Input
 5		WRITE(*,*) 'Introdueix un valor per K'
-		READ(*,*,IOSTAT=IEST) K
+		READ(*,*,IOSTAT=IEST), K
 		
-		IF((K.LT.15).OR.(K.GT.221).OR.(IEST.NE.0)) THEN
+		IF((K.LT.0).OR.(IEST.NE.0)) THEN
 			WRITE(*,*) 'Error'
 			GOTO 5
 		ELSE
@@ -26,42 +27,43 @@
 		ELSE
 !		Cos del programa
 			P=LAZY(K)
-			S=SUMA(M,N)	
+			S=SUMA(M,N)			
 			OPEN(UNIT=1,STATUS='UNKNOWN',FILE='P1-2016-res1.dat')
-			WRITE(1,*)'     #N       S8N        SASI         Q'
-!1000		!!!FORMAT(I10,2X,F14.4, 2X, F14.4, 2X, F9.8)
-			DO N= 11,311, 3
-				S8=SUMA(8,N)
-				SASI=(N**3)/5.0
-				Q=S8/SASI				
-				WRITE(1,*) N, S8, SASI, Q
+			!!!OPEN(UNIT=2,STATUS='UNKNOWN', FILE='P1-2016-fig1.dat')
+			!!!OPEN(UNIT=3,STATUS='UNKNOWN', FILE='P1-2016-fig2.dat')
+			
+			DO N= 5,201, 2
+				S4=SUMA(4,N)
+				!!!WRITE(1,*) N, S4, SASI, Q
+				SASI=(N**3)/6
+				!!!WRITE(2,*) N, SASI !!!
+				Q=S4/SASI
+				!!!WRITE(3,*) N, Q
+				WRITE(1,*) N, S4, SASI, Q
 			ENDDO
-!		Output 								
+!		Output 								+ Cambiar archivo gnuplot y no usar "using 1:2" y "using 1:3"
 			WRITE(*,*) 'P = ', P
 			WRITE(*,*) 'S= ', S
 			CLOSE (UNIT=1)
+			!!!CLOSE (UNIT=2)!!!
+			!!!CLOSE (UNIT=3)
+		
 		ENDIF
 		ENDIF
 	END
 !	Funcio que calcula el valor P(K)
-	REAL FUNCTION LAZY(K)
-	IMPLICIT NONE
-	REAL EN,P
-	PARAMETER (EN=2.71828182846)
-	INTEGER K
-	P=((K**2.0)*(3/5.0)+10.0*K+EN)
-	LAZY=P
+	INTEGER FUNCTION LAZY(K)
+		INTEGER P,K
+		P=((K**2)+K+2)/2
+		LAZY=P
 	RETURN
 	END FUNCTION
-	
 !	Funcio que calcula el sumatori	
-	DOUBLE PRECISION FUNCTION SUMA(M,N)
-	IMPLICIT NONE
-	INTEGER M, N,I
-	REAL T, LAZY
-		SUMA=0.0D0
+	INTEGER FUNCTION SUMA(M,N)
+	INTEGER M, N
 		DO I=M,N
-			SUMA=SUMA+LAZY(I)
+			P=P+LAZY(I)
 		ENDDO
+		SUMA=P
 	RETURN
 	ENDFUNCTION

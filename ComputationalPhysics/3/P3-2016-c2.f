@@ -1,85 +1,143 @@
-!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<PRACTICA 3 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< PREPRACTICA 3 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 !Programa que integra varies funcions mitjançant la subrutina
-!externa MyIntegrator. ATENCIO!! ORDRE SUBRUTINA: A, L, M, IM, VALOO, FCN
+!externa MyIntegrator. ATENCIO!! ORDRE SUBRUTINA: A, L, M, IM, VALOR, FCN
 !OP OCT 2016
 	PROGRAM PRACTICA3
 	  IMPLICIT NONE
 !	Declarem variables
-	  REAL*8 PI, AREATR1, AREASI1,ERRORTR2, ERRORSI2
-	  REAL*8 L, H, ERRORSIMP, ERRORTRAP, VALORTR, VALORSI, A, B, T
-	  REAL*8 EXAC, AREATR2,AREASI2, YCROMMELIN, Z
-	  INTEGER IM, M
-	  EXTERNAL YCROMMELIN
-	  COMMON /PASO/ H
-	  PARAMETER(PI=4.d0*DATAN(1.d0))
+	  REAL*8 VALOR, PI
+	  REAL*8 A, L, R, DENS, H, ERROR, ERRORTRAP
+	  REAL*8 LONGSIMP, LONGTRAP, MASSSIMP, MASSTRAP
+	  INTEGER IM, M, IFU, MAXITER
+	  EXTERNAL MIFUN
+	  COMMON /IFU/ IFU
+	  COMMON /PASO/ H!, ERROR
+	  PARAMETER(PI=4.d0*ATAN(1.d0))
 !	Constants modificables								
-	  A=1376.3D0  !km*10**6
-	  B=542.617D0 !km*10**6 
-	  T=27.89D0 !ANYS
-	
+	  PARAMETER (R=3.325D0) !cm
 !	Formats
-!10	  FORMAT(F20.14)
-100   FORMAT(E20.14, 2X, E20.14, 2X, E20.14)
- 
-!  	Arxius necessaris
-	  OPEN(UNIT=1,STATUS='UNKNOWN',FILE='P3-2016-c2-res1.dat')    	  
-	  OPEN(UNIT=2,STATUS='UNKNOWN',FILE='P3-2016-c2-res2.dat')  
-	  OPEN(UNIT=3,STATUS='UNKNOWN',FILE='P3-Erroresf1.dat')
-	  OPEN(UNIT=4,STATUS='UNKNOWN',FILE='P3-Erroresf2.dat')	
-!	CALCUL INTEGRAL I ESTUDI ERRORS (apartat 2)
+10	  FORMAT(F14.8)
+100	  FORMAT(E14.8, 2X, E14.8, 2X, E14.8)
+!	Arxius necessaris
+	  OPEN(UNIT=1,STATUS='UNKNOWN',FILE='P3-2016-res1.dat')    	  
+	  OPEN(UNIT=2,STATUS='UNKNOWN',FILE='P3-2016-res2.dat')  
+	  OPEN(UNIT=3,STATUS='UNKNOWN', FILE='P3-2016-res3.dat')
+	  OPEN(UNIT=4,STATUS='UNKNOWN',FILE='P3-2016-res4.dat')
+	  OPEN(UNIT=5,STATUS='UNKNOWN',FILE='P3-Erroresf1.dat')
+	  OPEN(UNIT=6,STATUS='UNKNOWN',FILE='P3-Erroresf2.dat')
+	  OPEN(UNIT=7,STATUS='UNKNOWN',FILE='P3-Erroresf3.dat')
+!  	CALCUL INTEGRAL (apartat 3)
+!--------------------------------------------------------------------------------------
+	  M=10
+	  !Longitud
+	  IFU=0    	
+	  CALL MYINTEGRATOR (0.0D0, 2.0D0*R, M, 1, VALOR, MIFUN)
+	  !ERRORTRAP= ABS(VALOR-(PI*3.325D0))
+	  !WRITE(1,*) 'Trapezis:', VALOR, 'Error: ', ERRORTRAP
+	  WRITE(1,*) 'Longitud: '
+	  WRITE(1,*)
+	  WRITE(1,*) 'Trapezis'
+	  WRITE(1,10) VALOR
+	  
+	  CALL MYINTEGRATOR (0.0D0, 2.0D0*R, M, 2, VALOR, MIFUN)
+	  !ERROR= ABS(VALOR-(PI*3.325D0))
+	  !WRITE(1,*) 'Simpson:', VALOR, 'Error: ', ERROR
+	  WRITE(1,*) 'Simpson:'
+	  WRITE(1,10) VALOR
+	  WRITE(1,*) 
+	  !Massa
+	  IFU=1
+	  CALL MYINTEGRATOR (0.0D0, 4.0D0, M, 1, VALOR, MIFUN)
+	  L=4.0D0 !m
+	  DENS=1.42D0 !Kg/m
+	  ERRORTRAP=ABS(VALOR-(DENS*7.D0*PI*L/16.0D0))
+	  !WRITE(1,*) 'Trapezis:', VALOR, 'Error: ', ERRORTRAP
+	  WRITE(1,*) 'Massa:'
+	  WRITE(1,*)
+	  WRITE(1,*) 'Trapezis'
+	  WRITE(1,10) VALOR
+	  CALL MYINTEGRATOR (0.0D0, 4.0D0, M, 2, VALOR, MIFUN)
+	  L=4.0D0 !m
+	  DENS=1.42D0 !Kg/m
+	  ERROR=ABS(VALOR-(DENS*7.D0*PI*L/16.0D0))
+	  !WRITE(1,*) 'Simpson:', VALOR, 'Error: ', ERROR 
+	  WRITE(1,*) 'Simpson:'
+	  WRITE(1,10) VALOR
+	  WRITE(1,*) 
+	  
+!	ESTUDI ERRORS (apartat 4 i 5)
 !---------------------------------------------------------------------------------------
-	DO M=4, 22
-	A=1376.3D0
-	B=542.617D0
-	!H=B/(2**M)
-	EXAC=PI*A*B
-	Z=(-(5.D0*B)/2.D0)
-	CALL MYINTEGRATOR(Z, B, M, 1, VALORTR, YCROMMELIN)
-	AREATR1=4.0D0*VALORTR
-	ERRORTRAP=DABS(AREATR1-EXAC)
-	A=1376.3D0  
-	B=542.617D0
-	Z=(-(5.D0*B)/2.D0)
-	CALL MYINTEGRATOR(Z, B, M, 2, VALORSI, YCROMMELIN)
-	AREASI1=4.0D0*VALORSI
-	ERRORSIMP=DABS(AREASI1-EXAC)
-	WRITE(1,100), H, AREATR1, AREASI1
-	WRITE(3,100) H, ERRORTRAP, ERRORSIMP
-	A=1376.3D0
-	B=542.617D0	 
-!	2)C
-	EXAC=A*B*(3.D0*DSQRT(3.D0)+2.D0*PI)/24.D0
-	Z=-(9.d0*B)/4.d0
-	CALL MYINTEGRATOR (Z, B/2.D0, M, 1, AREATR2, YCROMMELIN)
-	CALL MYINTEGRATOR (Z, B/2.D0, M, 2, AREASI2, YCROMMELIN)
-	WRITE(2,100), H, AREATR2, AREASI2
-	ERRORTR2=DABS(EXAC-AREATR2)
-	ERRORSI2=DABS(EXAC-AREASI2)
-	WRITE(4,100) H, ERRORTR2,ERRORSI2
-
+		DO M=2, 20
+!		Funcio 1
+	  	IFU=0
+		CALL MYINTEGRATOR (0.0D0, 2.0D0*R, M, 1, LONGTRAP, MIFUN)
+		ERRORTRAP=ABS(LONGTRAP-PI*R)	
+		CALL MYINTEGRATOR (0.0D0, 2.0D0*R, M, 2, LONGSIMP, MIFUN)	
+		ERROR=ABS(LONGSIMP-(PI*R))
+		WRITE(2,100), H, LONGTRAP, LONGSIMP
+		WRITE(5,100), H, ERRORTRAP, ERROR
+!		Funcio 2
+		IFU=1
+		CALL MYINTEGRATOR (0.0D0, 4.0D0, M, 1, MASSTRAP, MIFUN)
+		L=4.0D0
+	    DENS=1.42D0
+		ERRORTRAP=ABS(MASSTRAP-(DENS*7.D0*PI*L/16.0D0))
+		CALL MYINTEGRATOR (0.0D0, 4.0D0, M, 2, MASSSIMP, MIFUN)
+		L=4.0D0
+	    DENS=1.42D0
+		ERROR=ABS(MASSSIMP-(DENS*7.D0*PI*L/16.0D0))
+		WRITE(3,100), H, MASSTRAP, MASSSIMP
+	    WRITE(6,100), H, ERRORTRAP, ERROR            
+!		Funcio 2 amb canvi de variable
+	    IFU=2
+	    CALL MYINTEGRATOR (0.0D0, PI, M, 1, MASSTRAP, MIFUN)
+		L=4.0D0
+	    DENS=1.42D0
+	    ERRORTRAP=ABS(MASSTRAP-(DENS*7.D0*PI*L/16.0D0))
+	    CALL MYINTEGRATOR (0.0D0, PI, M, 2, MASSSIMP, MIFUN)
+		L=4.0D0
+	    DENS=1.42D0
+		ERROR=ABS(MASSSIMP-(DENS*7.D0*PI*L/16.0D0))
+	    WRITE(4,100), H, MASSTRAP, MASSSIMP
+	    WRITE(7,100), H, ERRORTRAP, ERROR	
 		ENDDO  
-!----------------------------------------------------------------------------------------
 	  CLOSE(1)
 	  CLOSE(2)	
 	  CLOSE(3)
 	  CLOSE(4)
-	 
+	  CLOSE(5)
+	  CLOSE(6)
+	  CLOSE(7)
 	END
 	
-!Funcio YCrommelin
-	REAL*8 FUNCTION YCROMMELIN(X)
+!Funcio a integrar (depen de IFU)
+	REAL*8 FUNCTION MIFUN(X)
 	  IMPLICIT NONE
-	  REAL*8 A, B, T, X, K, Y
-	  PARAMETER (A=1376.3D0)	!km*10.D0**6.D0
-	  PARAMETER (B=542.617D0)	!km*10.D0**6.D0
-	  PARAMETER (T=27.89D0) !Anys
+	  REAL*8 X, R
+	  REAL*8 DENS, L
+	  INTEGER IFU
+	  COMMON /IFU/ IFU
 	  
-	  Y=((X+(2.0D0*B))**(2.D0))/(B**2.D0)
-	  K=1.D0-Y
-	  IF(K.LT.0) THEN
-	    YCROMMELIN=0.D0
+	  PARAMETER (L=4.0D0) !m
+	  PARAMETER (R=3.325D0) !cm
+	  PARAMETER (DENS=1.42D0) !Kg/m
+!	  Funció per IFU=0
+	  IF(IFU.EQ.0) THEN
+!		Evitem la singularitat en R i -R
+	    IF((X.EQ.R).OR.(X.EQ.-R)) THEN
+		  MIFUN = 0.D0
+		ELSE
+		  MIFUN=DSQRT((R**2.D0)/((R**2.D0)-(X**2.D0)))
+		ENDIF
+!	  Funcio per IFU=1 		
+	  ELSE IF(IFU.EQ.1) THEN
+		MIFUN=DENS*DSQRT(1.0D0-(2.D0*X/L)**2.D0)*(1.0D0-(2.D0*X/L))**3.D0 			 !x e [-L/2, L/2]
+!	  Funcio per IFU=2		
+	  ELSE IF(IFU.EQ.2) THEN
+	    MIFUN=L*DCOS(X)/2.D0*DENS*DCOS(X)*(1.0D0-DSIN(X))**3.D0          !CANVI DE VARIABLE: SIN(T)=2X/L
+!	  Per qualsevol altre valor d'IFU
 	  ELSE
-	    YCROMMELIN=A*SQRT(K)
-        
+	    PRINT*, 'Valor IFU no valid'
 	  ENDIF
-	END
+	END  
+		
