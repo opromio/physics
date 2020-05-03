@@ -16,11 +16,11 @@ time.
 
 #### Installation requirements
 
-**Python**: v2.7.
+**Python**: v2.7.15 (any 2.7 should be fine)
 
-The only required library is numpy as shown in the requirements.txt
+The only required library is numpy as shown in the requirements.txt.
 
-In order to run the code you should execute:
+In order to run the code you should execute from the ShorAlgorithm folder:
 ```
 python ShorAlgSim.py
 ```
