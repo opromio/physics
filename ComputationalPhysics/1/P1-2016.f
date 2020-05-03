@@ -12,7 +12,7 @@
 
 !		Input
 5		WRITE(*,*) 'Introdueix un valor per K'
-		READ(*,*,IOSTAT=IEST), K
+		READ(*,*,IOSTAT=IEST) K
 		
 		IF((K.LT.0).OR.(IEST.NE.0)) THEN
 			WRITE(*,*) 'Error'
