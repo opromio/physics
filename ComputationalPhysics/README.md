@@ -5,7 +5,6 @@ This are all the practices done for the Computational Physics course. They were 
 ```
 gfortran NameOfFile.f -o outfile.out
 ```
-For executing the code you just need to execute the .out file.
 I have tested the code and everything should be fine but if you find any problem you can report a bug and I will have a look into it.
 
 If the compilation does not rise any problem you will be able to run the executable by:
